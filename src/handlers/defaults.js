@@ -1,6 +1,6 @@
-//================================================================================
-//= Collection Directives
-//================================================================================
+/**
+ * Descriptor that describes the order of an array
+ */
 Descriptor.register("array", "order", function(arr, v){
 
    // lastName desc, firstName desc > []
@@ -21,19 +21,29 @@ Descriptor.register("array", "order", function(arr, v){
    return arr;
 });
 
+/**
+ * Descriptor that describes the starting index of an array
+ */
 Descriptor.register("array", "offset", function(arr, v){
 
    return arr.splice(v);
 });
 
+/**
+ * Descriptor that describes the length of an array
+ */
+Descriptor.register("array", "limit", function(arr, v){
+
+   return arr.splice(0, v);
+});
+
+
+/**
+ * Descriptor that groups keys of an array
+ */
 Descriptor.register("array", "group", function(arr){
 
    console.warn("The *group* directive is not yet supported");
 
    return arr;
-});
-
-Descriptor.register("array", "limit", function(arr, v){
-
-   return arr.splice(0, v);
 });

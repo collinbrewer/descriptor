@@ -25,6 +25,16 @@ describe("Descriptor", function(){
 
    context("#evaluate", function(){
 
+      it("should return original document", function(){
+
+         var doc=[3, 1, 2];
+         var descriptor={"no":1, "such":2, "descriptors":3};
+         var f=Descriptor.compile(descriptor);
+         var results=f(doc);
+
+         results.should.have.length(3);
+      });
+
       it("should evaulate a document against registered directive", function(){
 
          Descriptor.register("comparator", "valueOfComplete", function(doc, value){

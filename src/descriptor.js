@@ -5,6 +5,11 @@
 
 (function(){
 
+   // Utility Methods
+   var isArray=Array.isArray || function (obj){
+      return obj.push && typeof obj.length === 'number';
+   };
+
    var registered={};
    var compiled={};
 
@@ -13,76 +18,99 @@
    /**
     * Compiles and returns a function that when given an array, will return a subset
     * of the array whose components meet the requirements of the request
+    * @param {Object} directives
     */
-    Descriptor.compile=function(params){
+    Descriptor.compile=function(directives, type){
 
-      // TODO: handle the proper order
-      return function(params, doc){
+      return function(directives, type, doc){
 
          var result;
-         var d;
+         var directive;
+         var directiveName;
+         var directiveValue;
 
-         if(typeof(doc)==="object")
+         // get the directives that are actually registered
+         var validDirectives={};
+
+         for(var key in directives)
          {
-            if(doc instanceof Array) // NOTE: "array-ish" may be better
+            if(registered.hasOwnProperty(key))
             {
-               for(var directive in params)
-               {
-                  if(directive in registered)
-                  {
-                     d=registered[directive];
-
-                     if(d.type==="comparator")
-                     {
-                        result=[];
-                        var v=params[directive];
-
-                        for(var i=0, l=doc.length, s; i<l, (s=doc[i++]);)
-                        {
-                           if(d.handler(s, v))
-                           {
-                              result.push(s);
-                           }
-                        }
-                     }
-                     else
-                     {
-                        result=d.handler(doc, params[directive]);
-                     }
-                  }
-               }
+               validDirectives[key]=directives[key];
             }
-            else
+         }
+
+         // TODO: need a better way to handle the proper order... sort of hardcoded at the moment and it's bad.
+         if(type)
+         {
+            for(directiveName in validDirectives)
             {
-               result=true;
+               directive=registered[directiveName];
 
-               for(var directive in params)
+               if(directive.type===type)
                {
-                  if(directive in registered)
-                  {
-                     d=registered[directive];
+                  directiveValue=directives[directiveName];
 
-                     if(d.type!=="comparator")
-                     {
-                        result&=d.handler(doc, params[directive]);
-                     }
-
-                     if(!result)
-                     {
-                        break;
-                     }
-                  }
+                  doc=directive.handler(doc, directiveValue);
                }
             }
          }
-         else
+
+         // run the comparators on each node
+         var docIsArray=isArray(doc);
+         var value;
+         var passes;
+
+         result=(docIsArray ? [] : {});
+
+         for(var key in doc)
          {
-            result=doc;
+            if(doc.hasOwnProperty(key))
+            {
+               value=doc[key];
+               passes=true;
+
+               for(directiveName in validDirectives)
+               {
+                  directive=registered[directiveName];
+                  directiveValue=directives[directiveName];
+
+                  if(directive.type==="comparator")
+                  {
+                     passes&=directive.handler(value, directiveValue);
+                  }
+
+                  if(!passes)
+                  {
+                     break;
+                  }
+               }
+
+               if(passes)
+               {
+                  docIsArray ? (result.push(value)) : (result[key]=value);
+               }
+            }
+         }
+
+         // filter arrays
+         if(docIsArray)
+         {
+            for(directiveName in validDirectives)
+            {
+               directive=registered[directiveName];
+               directiveValue=directives[directiveName];
+
+               if(directive.type==="array")
+               {
+                  result=directive.handler(result, directiveValue);
+               }
+            }
          }
 
          return result;
 
-      }.bind(null, params);
+      }.bind(null, directives, type);
    };
 
    Descriptor.register=function(type, directive, handler){

@@ -1,20 +1,16 @@
 # Descriptor.js
-Descriptor offers a unified format for queries and their datasets, and includes a utility for understanding the descriptor.
+Descriptor is an extensible utility for describing and working with criteria in a unified format.
 
-```Descriptor``` is used primarily for:
-- Defining queries in a unified way when Descriptoring datasets
-- Generating unique keys for caching datasets
-- Comparing queries and query depth for cache optimization
-
-## What can you do with it?
-Out of the box, ```Descriptor``` can:
-
+Descriptor is used primarily for:
 - Use a unified format to describe datasets
-- Compare Descriptors to determine if they are the same or if one is more strict than the other
-- Parse and stringify in multiple formats, including JSON and a non-standardized queryString format
+- Generating unique keys for caching datasets
+- Parse and stringify into multiple formats
+- Comparing descriptors granularity(which we use for optimizing caches and HTTP requests)
 - Test a value against the parameters of the Descriptor
 - Filter an array for values matching the parameters of the Descriptor
-- Extensible...
+
+
+## What can you do with it?
 
 ### Example
 ```javascript
@@ -24,18 +20,17 @@ var filter=Descriptor.compile(descriptor);
 var uncompletedTodos=todos.filter(filter);
 ```
 
+## What is provided out of the box?
+For pre-built functionality, including **default** in your project gives you:
 
-## What can you do with it out of the box?
-
-Descriptor is completely extensible, so it can handle custom parameters, and supplies hooks for custom processing.
-
-In fact, all the parameters currently supported by Descriptor are available because they have been registered with Descriptor.
+   - Exports/Imports JSON, SQL and a non-standardized queryString format
+   - Basic store/collection/object descriptors
 
 ### Example
 Let's say you want to extend Descriptor's capability to include a parameter for logging out what's going on.
--
+
 ```javascript
-Descriptor.register("shouldLog", function(parameterValue, objectInDataset){
+Descriptor.register("shouldLog", function(objectInDataset, parameterValue){
 
    if(parameterValue===true)
    {

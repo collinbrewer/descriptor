@@ -3,7 +3,7 @@ var Descriptor=require("../index.js");
 
 global.Descriptor=Descriptor;
 
-require("../src/handlers/index.js");
+require("../src/handlers/defaults.js");
 
 describe("Handlers", function(){
 
