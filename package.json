@@ -1,6 +1,6 @@
 {
   "name": "descriptor",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Descriptor is an extensible utility for describing and working with criteria in a unified format.",
   "main": "index.js",
   "scripts": {
@@ -11,5 +11,8 @@
     "url": "https://collinbrewer@bitbucket.org/collinbrewer/descriptor.git"
   },
   "author": "Collin Brewer <collin@brewer-collective.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "isarray": "0.0.1"
+  }
 }

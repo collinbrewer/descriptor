@@ -42,6 +42,7 @@ describe("Descriptor", function(){
             return doc.hasOwnProperty("complete") && doc.complete===value;
          });
 
+         // array doc
          var doc=[
             {"complete":false},
             {"date":true},
@@ -56,6 +57,26 @@ describe("Descriptor", function(){
 
          var results=f(doc);
 
+         results.should.have.length(1);
+
+         // object doc
+         doc={
+            "first" : {"complete":false},
+            "second" : {"date":true},
+            "third" : {"complete":true}
+         };
+         results=f(doc);
+         results.should.have.property("third");
+         results.should.not.have.property("second");
+
+         // object doc, with array results option
+         doc={
+            "first" : {"complete":false},
+            "second" : {"date":true},
+            "third" : {"complete":true}
+         };
+         results=f(doc, {resultType:"array"});
+         results.should.be.an("array");
          results.should.have.length(1);
       });
    });

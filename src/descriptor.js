@@ -6,9 +6,7 @@
 (function(){
 
    // Utility Methods
-   var isArray=Array.isArray || function (obj){
-      return obj.push && typeof obj.length === 'number';
-   };
+   var isArray=require("isarray");
 
    var registered={};
    var compiled={};
@@ -22,7 +20,9 @@
     */
     Descriptor.compile=function(directives, type){
 
-      return function(directives, type, doc){
+      return function(directives, type, doc, options){
+
+         options || (options={});
 
          var result;
          var directive;
@@ -57,11 +57,12 @@
          }
 
          // run the comparators on each node
-         var docIsArray=isArray(doc);
+         var resultType=("resultType" in options ? (options.resultType) : "auto");
+         var resultTypeIsArray=(resultType==="auto" ? isArray(doc) : (resultType==="array"));
          var value;
          var passes;
 
-         result=(docIsArray ? [] : {});
+         result=(resultTypeIsArray ? [] : {});
 
          for(var key in doc)
          {
@@ -88,13 +89,13 @@
 
                if(passes)
                {
-                  docIsArray ? (result.push(value)) : (result[key]=value);
+                  resultTypeIsArray ? (result.push(value)) : (result[key]=value);
                }
             }
          }
 
          // filter arrays
-         if(docIsArray)
+         if(resultTypeIsArray)
          {
             for(directiveName in validDirectives)
             {
