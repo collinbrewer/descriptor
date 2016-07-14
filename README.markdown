@@ -2,19 +2,19 @@
 Descriptor is an extensible utility for describing and working with criteria in a unified format.
 
 Descriptor is used primarily for:
-- Use a unified format to describe datasets
-- Generating unique keys for caching datasets
+- Describing datasets with a unified format
+- Test if a value matches a Descriptor
+- Filter an array for values matching the parameters of the Descriptor
+- Idempotent serialization that can be used as unique keys for caching datasets
 - Parse and stringify into multiple formats
 - Comparing descriptors granularity(which we use for optimizing caches and HTTP requests)
-- Test a value against the parameters of the Descriptor
-- Filter an array for values matching the parameters of the Descriptor
-
 
 ## What can you do with it?
 
 ### Example
 ```javascript
 var descriptor={entityName:"Todo", predicate:"completed!=true"};
+
 var filter=Descriptor.compile(descriptor);
 
 var uncompletedTodos=todos.filter(filter);
@@ -23,8 +23,8 @@ var uncompletedTodos=todos.filter(filter);
 ## What is provided out of the box?
 For pre-built functionality, including **default** in your project gives you:
 
-   - Exports/Imports JSON, SQL and a non-standardized queryString format
-   - Basic store/collection/object descriptors
+- Exports/Imports JSON, SQL and a non-standardized queryString format
+- Basic store/collection/object descriptors
 
 ### Example
 Let's say you want to extend Descriptor's capability to include a parameter for logging out what's going on.

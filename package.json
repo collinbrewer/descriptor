@@ -11,8 +11,12 @@
     "url": "https://collinbrewer@bitbucket.org/collinbrewer/descriptor.git"
   },
   "author": "Collin Brewer <collin@brewer-collective.com>",
-  "license": "MIT",
+  "license": "ISC",
   "dependencies": {
     "isarray": "0.0.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3"
   }
 }
