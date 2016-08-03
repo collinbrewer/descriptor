@@ -134,7 +134,7 @@ Descriptor.stringify = function(d) {
  * Creates a descriptor from a string
  */
 Descriptor.parse = function(s) {
-   let directives = JSON.parse(s);
+   var directives = JSON.parse(s);
    return new Descriptor(directives);
 };
 
@@ -145,8 +145,8 @@ Descriptor.parse = function(s) {
  */
  Descriptor.compile=function(directives, type){
 
-   let descriptorKey = Descriptor.stringify(directives);
-   let descriptor = cached[descriptorKey];
+   var descriptorKey = Descriptor.stringify(directives);
+   var descriptor = cached[descriptorKey];
 
    if(!descriptor) {
       descriptor = (cached[descriptorKey] = new Descriptor(directives, type));
