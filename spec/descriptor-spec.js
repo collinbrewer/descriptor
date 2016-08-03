@@ -1,4 +1,5 @@
 var should=require("chai").should();
+var expect = require('chai').expect;
 var Descriptor=require("../index.js");
 
 describe("Descriptor", function(){
@@ -20,6 +21,29 @@ describe("Descriptor", function(){
          var f=Descriptor.compile(descriptor);
 
          f.should.be.a("function");
+      });
+   });
+
+   context("#stringify", function(){
+
+      it("should return a string", function(){
+
+         var descriptor={"foo":"bar"};
+
+         var s=Descriptor.stringify(descriptor);
+
+         s.should.be.a("string");
+      });
+   });
+
+   context("#parse", function(){
+
+      it("should return a descriptor", function(){
+
+         var s='{"foo":"bar"}';
+         var d=Descriptor.parse(s);
+
+         expect(d instanceof Descriptor).to.be.true;
       });
    });
 

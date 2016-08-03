@@ -1,3 +1,5 @@
+var Descriptor = require('../descriptor.js');
+
 /**
  * Descriptor that describes the order of an array
  */
