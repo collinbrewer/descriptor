@@ -27,6 +27,7 @@
   "devDependencies": {
     "babel-cli": "^6.14.0",
     "babel-eslint": "^6.1.2",
+    "babel-register": "^6.14.0",
     "chai": "^3.5.0",
     "eslint": "^2.13.1",
     "eslint-config-happiness": "^5.3.1",
