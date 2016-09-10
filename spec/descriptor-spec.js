@@ -1,10 +1,45 @@
-var expect = require('chai').expect;
-var Descriptor = require('../index.js');
+import {expect} from 'chai';
+import Descriptor from '../src/descriptor.js';
 
 describe('Descriptor', function () {
+	context('#constructor', function () {
+		it('should create a new descriptor', function () {
+			var descriptor = new Descriptor();
+
+			expect(descriptor).to.exist;
+		});
+	});
+
 	context('#register', function () {
 		it('should register a new directive', function () {
-			Descriptor.register('new', function () {});
+			Descriptor.register('array', 'directive', function () {});
+
+			expect(Descriptor.registered).to.have.all.keys('directive');
+		});
+	});
+
+	context('#extend', () => {
+		it('should clone the descriptor', () => {
+			let CustomDescriptor = Descriptor.extend();
+
+			expect(CustomDescriptor).to.exist;
+		});
+
+		it('should clone the source descriptors registered directives', () => {
+			let CustomDescriptor = Descriptor.extend();
+
+			expect(CustomDescriptor.registered).to.have.all.keys('directive');
+		});
+
+		it('should exclude subsequent registered directives', () => {
+			Descriptor.registered = {};
+			Descriptor.register('array', 'sharedDirective', () => {});
+			let CustomDescriptor = Descriptor.extend();
+			Descriptor.register('array', 'originalDirective', () => {});
+			CustomDescriptor.register('array', 'customDirective', () => {});
+
+			expect(Descriptor.registered).to.have.all.keys('sharedDirective', 'originalDirective');
+			expect(CustomDescriptor.registered).to.have.all.keys('sharedDirective', 'customDirective');
 		});
 	});
 

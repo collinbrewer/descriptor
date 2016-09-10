@@ -4,12 +4,12 @@
 */
 
 // Utility Methods
-var isArray = require('isarray');
+import isArray from 'isarray';
+import clone from 'clone';
 
-var registered = {};
 var cached = {};
 
-function evaluate (directives, type, doc, options) {
+function evaluate (registered, directives, type, doc, options) {
 	options || (options = {});
 
 	var result;
@@ -87,39 +87,41 @@ function evaluate (directives, type, doc, options) {
 	return result;
 }
 
-function Descriptor (directives, type, options) {
-	this.directives = directives;
-	this.type = type;
+class Descriptor {
+	constructor (directives, type, options) {
+		this.directives = directives;
+		this.type = type;
+	}
+
+	evaluate (doc, options) {
+		return evaluate(Descriptor.registered, this.directives, this.type, doc, options || this.options);
+	}
+
+	getDirectives () {
+		return this.directives;
+	}
+
+	getType () {
+		return this.type;
+	}
+
+	stringify () {
+		return JSON.stringify(this.directives);
+	}
 }
 
-Descriptor.prototype.evaluate = function (doc, options) {
-	return evaluate(this.directives, this.type, doc, options || this.options);
-};
-
-Descriptor.prototype.getDirectives = function () {
-	return this.directives;
-};
-
-Descriptor.prototype.getType = function () {
-	return this.type;
-};
-
-Descriptor.prototype.stringify = function () {
-	return JSON.stringify(this.directives);
-};
+Descriptor.registered = {};
 
 /**
  * Creates a serializable string version of the descriptor
  */
-Descriptor.stringify = function (d) {
-	return ((d instanceof Descriptor) ? d.stringify : JSON.stringify(d));
-};
+Descriptor.stringify = d => (d instanceof Descriptor) ? d.stringify : JSON.stringify(d);
 
 /**
  * Creates a descriptor from a string
  */
-Descriptor.parse = function (s) {
-	var directives = JSON.parse(s);
+Descriptor.parse = s => {
+	const directives = JSON.parse(s);
 	return new Descriptor(directives);
 };
 
@@ -128,9 +130,9 @@ Descriptor.parse = function (s) {
  * of the array whose components meet the requirements of the request
  * @param {Object} directives
  */
- Descriptor.compile = function (directives, type) {
-	var descriptorKey = Descriptor.stringify(directives);
-	var descriptor = cached[descriptorKey];
+Descriptor.compile = (directives, type) => {
+	const descriptorKey = Descriptor.stringify(directives);
+	let descriptor = cached[descriptorKey];
 
 	if (!descriptor) {
 		descriptor = (cached[descriptorKey] = new Descriptor(directives, type));
@@ -140,11 +142,21 @@ Descriptor.parse = function (s) {
 };
 
 Descriptor.register = function (type, directive, handler) {
-	registered[directive] = {
+	this.registered[directive] = {
 		'type': type,
 		'directive': directive,
 		'handler': handler
 	};
+};
+
+/**
+ * A factory method for creating new Descriptor types
+ * @return {class}	The new Descriptor subclass
+ */
+Descriptor.extend = function () {
+	let extended = Object.create(this);
+	extended.registered = clone(this.registered);
+	return extended;
 };
 
 // expose

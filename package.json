@@ -2,10 +2,17 @@
   "name": "descriptor",
   "version": "0.2.1",
   "description": "Descriptor is an extensible utility for describing and working with criteria in a unified format.",
-  "main": "index.js",
+  "main": "./lib/index.js",
   "scripts": {
-    "test": "mocha spec",
-    "test:watch": "mocha spec --watch"
+    "build": "babel --source-map inline -d lib/ src/",
+	 "build:watch": "babel --watch --source-map inline -d lib/ src/",
+    "test": "mocha spec --compilers js:babel-register",
+    "test:watch": "mocha spec --watch --compilers js:babel-register",
+    "test:cov": "istanbul cover --report lcov --report json --report text --report html _mocha -- spec",
+    "pretest:codeclimate": "npm run test:cov",
+    "test:codeclimate": "codeclimate-test-reporter < ./coverage/lcov.info",
+    "lint": "eslint .",
+    "autopublish": "publish"
   },
   "repository": {
     "type": "git",
@@ -14,9 +21,11 @@
   "author": "Collin Brewer <collin@brewer-collective.com>",
   "license": "ISC",
   "dependencies": {
+    "clone": "^1.0.2",
     "isarray": "0.0.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.14.0",
     "babel-eslint": "^6.1.2",
     "chai": "^3.5.0",
     "eslint": "^2.13.1",
