@@ -1,4 +1,6 @@
 # Descriptor.js
+[![Code Climate](https://img.shields.io/codeclimate/coverage/github/triAGENS/ashikawa-core.svg?maxAge=2592000)](https://codeclimate.com/github/collinbrewer/descriptor)
+
 Descriptor is an extensible utility for describing and working with criteria in a unified format.
 
 Descriptor is used primarily for:
