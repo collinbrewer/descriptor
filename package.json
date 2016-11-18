@@ -1,6 +1,6 @@
 {
   "name": "@collinbrewer/descriptor",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Descriptor is an extensible utility for describing and working with criteria in a unified format.",
   "main": "./lib/index.js",
   "scripts": {
