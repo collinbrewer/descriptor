@@ -22,8 +22,7 @@
   "author": "Collin Brewer <collin@brewer-collective.com>",
   "license": "ISC",
   "dependencies": {
-    "clone": "^1.0.2",
-    "isarray": "0.0.1"
+    "clone": "^1.0.2"
   },
   "devDependencies": {
     "babel-cli": "^6.14.0",

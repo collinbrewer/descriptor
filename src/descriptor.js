@@ -4,7 +4,6 @@
 */
 
 // Utility Methods
-import isArray from 'isarray';
 import clone from 'clone';
 
 var cached = {};
@@ -42,7 +41,7 @@ function evaluate (registered, directives, type, doc, options) {
 
 	// run the comparators on each node
 	var resultType = ('resultType' in options ? (options.resultType) : 'auto');
-	var resultTypeIsArray = (resultType === 'auto' ? isArray(doc) : (resultType === 'array'));
+	var resultTypeIsArray = (resultType === 'auto' ? Array.isArray(doc) : (resultType === 'array'));
 	var value;
 	var passes;
 
